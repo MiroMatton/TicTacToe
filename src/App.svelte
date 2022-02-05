@@ -5,6 +5,7 @@
 
   let board = new Array(9).fill(null);
   let currentPlayer = X;
+  let winner;
 
   const winCombos = [
     [0, 1, 2],
@@ -18,6 +19,7 @@
   ];
 
   const onClick = (i) => {
+    if (winner) return;
     if (board[i] !== X && board[i] !== O) board[i] = currentPlayer;
 
     currentPlayer = currentPlayer == X ? O : X;
@@ -26,6 +28,7 @@
 
   const checkWinner = () => {
     if (!board.includes(null)) {
+      winner = draw;
       alert("draw");
     } else {
       for (let i = 0; i < winCombos.length; i++) {
@@ -36,7 +39,8 @@
             board[winCombos[i][2]]
           )
         ) {
-          alert("Winner: " + toString(board[winCombos[i][0]]));
+          winner = toString(board[winCombos[i][0]]);
+          alert("Winner: " + winner);
         }
       }
     }
@@ -49,11 +53,12 @@
   const restart = () => {
     board = new Array(9).fill(null);
     currentPlayer = X;
+    winner = null;
   };
 
   const toString = (component) => {
     if (component === X) return "X";
-    else return "Y";
+    else return "O";
   };
 </script>
 
