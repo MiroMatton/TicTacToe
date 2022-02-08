@@ -25,5 +25,11 @@
         margin: 0rem;
       }
     }
+
+    @media (max-width: colors.$mobile) {
+      width: 2.5rem;
+      height: 2.5rem;
+      border: 0.75rem solid colors.$yellow;
+    }
   }
 </style>
