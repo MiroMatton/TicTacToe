@@ -39,7 +39,7 @@
   const gameOver = (result) => {
     if (result === null) return;
     if (result === "tie") {
-      winner = null;
+      winner = result;
       score(winner);
       showModal = true;
     } else {
@@ -50,21 +50,18 @@
   };
 
   const checkWinner = () => {
-    if (!board.includes(null)) {
-      return "tie";
-    } else {
-      for (let i = 0; i < winCombos.length; i++) {
-        if (
-          equals3(
-            board[winCombos[i][0]],
-            board[winCombos[i][1]],
-            board[winCombos[i][2]]
-          )
-        ) {
-          return board[winCombos[i][0]];
-        }
+    for (let i = 0; i < winCombos.length; i++) {
+      if (
+        equals3(
+          board[winCombos[i][0]],
+          board[winCombos[i][1]],
+          board[winCombos[i][2]]
+        )
+      ) {
+        return board[winCombos[i][0]];
       }
     }
+    if (!board.includes(null)) return "tie";
     return null;
   };
 

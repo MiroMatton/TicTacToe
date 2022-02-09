@@ -9,7 +9,7 @@
   $: if (showModal) {
     if (winner === X) (color = "lightBlue"), (message = "takes the round");
     else if (winner === O) (color = "yellow"), (message = "takes the round");
-    else if (!winner) (message = "Tie"), (color = "");
+    else if (winner === "tie") (message = "Tie"), (color = "");
   }
 </script>
 
@@ -18,7 +18,9 @@
     <div class="modal">
       <h2>You Won!</h2>
       <div class="row">
-        <svelte:component this={winner} />
+        {#if winner != "tie"}
+          <svelte:component this={winner} />
+        {/if}
         <h1 class={color}>{message}</h1>
       </div>
       <div class="row">
