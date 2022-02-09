@@ -11,6 +11,8 @@
   let scoreX = 0,
     scoreO = 0,
     scoreDraw = 0;
+  let human = X;
+  let cpu = O;
 
   const winCombos = [
     [0, 1, 2],
@@ -25,17 +27,31 @@
 
   const onClick = (i) => {
     if (winner) return;
-    if (board[i] !== X && board[i] !== O) board[i] = currentPlayer;
+    if (board[i] === X || board[i] === O) return;
 
-    currentPlayer = currentPlayer == X ? O : X;
-    checkWinner();
+    board[i] = human;
+    gameOver(checkWinner());
+    if (winner) return;
+    CPUMove();
+    gameOver(checkWinner());
+  };
+
+  const gameOver = (result) => {
+    if (result === null) return;
+    if (result === "tie") {
+      winner = null;
+      score(winner);
+      showModal = true;
+    } else {
+      winner = result;
+      score(result);
+      showModal = true;
+    }
   };
 
   const checkWinner = () => {
     if (!board.includes(null)) {
-      score(winner);
-      winner = null;
-      showModal = true;
+      return "tie";
     } else {
       for (let i = 0; i < winCombos.length; i++) {
         if (
@@ -45,12 +61,11 @@
             board[winCombos[i][2]]
           )
         ) {
-          winner = board[winCombos[i][0]];
-          score(board[winCombos[i][0]]);
-          showModal = true;
+          return board[winCombos[i][0]];
         }
       }
     }
+    return null;
   };
 
   const equals3 = (a, b, c) => {
@@ -71,6 +86,55 @@
 
   const toggleModal = () => {
     showModal = !showModal;
+  };
+
+  const CPUMove = () => {
+    currentPlayer = cpu;
+    let bestScore = Infinity;
+    let bestMove;
+    for (let i = 0; i < board.length; i++) {
+      if (board[i] !== null) continue; // if spot isn't available
+      board[i] = cpu;
+      let score = miniMax(board, 0, true);
+      board[i] = null;
+      if (score < bestScore) {
+        bestScore = score;
+        bestMove = i;
+      }
+    }
+    board[bestMove] = cpu;
+    currentPlayer = human;
+  };
+
+  const miniMax = (board, depth, isMaximizing) => {
+    let result = checkWinner();
+    if (result !== null) {
+      if (result === X) return 1;
+      else if (result === O) return -1;
+      else return 0;
+    }
+
+    if (isMaximizing) {
+      let bestScore = -Infinity;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] !== null) continue; // if spot isn't available
+        board[i] = human;
+        let score = miniMax(board, depth + 1, false);
+        board[i] = null;
+        bestScore = Math.max(score, bestScore);
+      }
+      return bestScore;
+    } else {
+      let bestScore = Infinity;
+      for (let i = 0; i < board.length; i++) {
+        if (board[i] !== null) continue; // if spot isn't available
+        board[i] = cpu;
+        let score = miniMax(board, depth + 1, true);
+        board[i] = null;
+        bestScore = Math.min(score, bestScore);
+      }
+      return bestScore;
+    }
   };
 </script>
 
