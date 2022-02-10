@@ -1,7 +1,10 @@
 <script>
   import X from "./X.svelte";
   import O from "./O.svelte";
+  import Button from "./Button.svelte";
+  import { modalRestart } from "./Game.svelte";
   export let showModal;
+  export let gameMode;
   export let winner;
   let color = "";
   let message = "";
@@ -11,6 +14,17 @@
     else if (winner === O) (color = "yellow"), (message = "takes the round");
     else if (winner === "tie") (message = "Tie"), (color = "");
   }
+
+  const quit = () => {
+    modalRestart();
+    showModal = false;
+    gameMode = null;
+  };
+
+  const next = () => {
+    modalRestart();
+    showModal = false;
+  };
 </script>
 
 {#if showModal}
@@ -24,9 +38,8 @@
         <h1 class={color}>{message}</h1>
       </div>
       <div class="row">
-        <button class="gray">quit</button><button class="yellow"
-          >next round</button
-        >
+        <Button on:click={() => quit()}>quit</Button>
+        <Button color="yellow" on:click={() => next()}>next round</Button>
       </div>
     </div>
   </div>
@@ -76,25 +89,5 @@
   .row {
     display: flex;
     align-items: center;
-  }
-  button {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    border-radius: 1rem;
-    box-shadow: 0 4px 0px 0px colors.$darkGray;
-    border: none;
-    margin: 1rem;
-    background-color: colors.$gray;
-    color: colors.$bg;
-    padding: 0.5rem 1rem;
-    cursor: pointer;
-    font-size: 1.5rem;
-    font-weight: bold;
-
-    &.yellow {
-      background-color: colors.$yellow;
-      box-shadow: 0 4px 0px 0px colors.$darkYellow;
-    }
   }
 </style>
