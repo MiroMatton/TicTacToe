@@ -16,6 +16,7 @@
   export let gameMode;
 
   let board = new Array(9).fill(null);
+  let winnerRow = new Array(9).fill("");
   let currentPlayer = X;
   let scoreX = 0,
     scoreO = 0,
@@ -51,13 +52,14 @@
       score(winner);
       showModal = true;
     } else {
+      checkWinner(true);
       winner = result;
       score(result);
       showModal = true;
     }
   };
 
-  const checkWinner = () => {
+  const checkWinner = (end) => {
     for (let i = 0; i < winCombos.length; i++) {
       if (
         equals3(
@@ -66,6 +68,14 @@
           board[winCombos[i][2]]
         )
       ) {
+        if (end) {
+          winnerRow[winCombos[i][0]] =
+            board[winCombos[i][0]] === X ? "winX" : "winO";
+          winnerRow[winCombos[i][1]] =
+            board[winCombos[i][1]] === X ? "winX" : "winO";
+          winnerRow[winCombos[i][2]] =
+            board[winCombos[i][2]] === X ? "winX" : "winO";
+        }
         return board[winCombos[i][0]];
       }
     }
@@ -79,6 +89,7 @@
 
   restart = () => {
     board = new Array(9).fill(null);
+    winnerRow = new Array(9).fill("");
     currentPlayer = X;
     winner = null;
   };
@@ -169,32 +180,32 @@
 </section>
 <section id="board">
   <div class="grid">
-    <div class="box" on:click={() => onClick(0)}>
-      <svelte:component this={board[0]} />
+    <div class="box {winnerRow[0]}" on:click={() => onClick(0)}>
+      <svelte:component this={board[0]} color={winnerRow[0]} />
     </div>
-    <div class="box" on:click={() => onClick(1)}>
-      <svelte:component this={board[1]} />
+    <div class="box {winnerRow[1]}" on:click={() => onClick(1)}>
+      <svelte:component this={board[1]} color={winnerRow[1]} />
     </div>
-    <div class="box" on:click={() => onClick(2)}>
-      <svelte:component this={board[2]} />
+    <div class="box {winnerRow[2]}" on:click={() => onClick(2)}>
+      <svelte:component this={board[2]} color={winnerRow[2]} />
     </div>
-    <div class="box" on:click={() => onClick(3)}>
-      <svelte:component this={board[3]} />
+    <div class="box {winnerRow[3]}" on:click={() => onClick(3)}>
+      <svelte:component this={board[3]} color={winnerRow[3]} />
     </div>
-    <div class="box" on:click={() => onClick(4)}>
-      <svelte:component this={board[4]} />
+    <div class="box {winnerRow[4]}" on:click={() => onClick(4)}>
+      <svelte:component this={board[4]} color={winnerRow[4]} />
     </div>
-    <div class="box" on:click={() => onClick(5)}>
-      <svelte:component this={board[5]} />
+    <div class="box {winnerRow[5]}" on:click={() => onClick(5)}>
+      <svelte:component this={board[5]} color={winnerRow[5]} />
     </div>
-    <div class="box" on:click={() => onClick(6)}>
-      <svelte:component this={board[6]} />
+    <div class="box {winnerRow[6]}" on:click={() => onClick(6)}>
+      <svelte:component this={board[6]} color={winnerRow[6]} />
     </div>
-    <div class="box" on:click={() => onClick(7)}>
-      <svelte:component this={board[7]} />
+    <div class="box {winnerRow[7]}" on:click={() => onClick(7)}>
+      <svelte:component this={board[7]} color={winnerRow[7]} />
     </div>
-    <div class="box" on:click={() => onClick(8)}>
-      <svelte:component this={board[8]} />
+    <div class="box {winnerRow[8]}" on:click={() => onClick(8)}>
+      <svelte:component this={board[8]} color={winnerRow[8]} />
     </div>
   </div>
 </section>
@@ -285,6 +296,16 @@
           margin-left: 0.5rem;
           padding-bottom: 0.5rem;
         }
+      }
+
+      &.winX {
+        background-color: colors.$lightBlue;
+        box-shadow: 0 8px 0px 0px colors.$darkLightBlue;
+      }
+
+      &.winO {
+        background-color: colors.$yellow;
+        box-shadow: 0 8px 0px 0px colors.$darkYellow;
       }
 
       &.score {

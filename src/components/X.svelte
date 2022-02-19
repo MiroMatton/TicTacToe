@@ -32,6 +32,10 @@
         transform: translateY(math.div(-$height, 2)) rotate(-45deg);
       }
 
+      &.winX {
+        background-color: colors.$blue;
+      }
+
       &.small {
         width: $widthSmall;
         height: $heightSmall;
